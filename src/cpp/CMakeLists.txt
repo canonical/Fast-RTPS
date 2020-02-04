@@ -208,6 +208,7 @@ set_sources(${${PROJECT_NAME}_source_files})
 set(${PROJECT_NAME}_security_source_files
     rtps/security/exceptions/SecurityException.cpp
     rtps/security/common/SharedSecretHandle.cpp
+    rtps/security/logging/Logging.cpp
     rtps/security/SecurityManager.cpp
     rtps/security/SecurityPluginFactory.cpp
     fastrtps_deprecated/security/OpenSSLInit.cpp
