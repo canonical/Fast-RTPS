@@ -75,3 +75,20 @@ Cryptography* SecurityPluginFactory::create_cryptography_plugin(const PropertyPo
 
     return plugin;
 }
+
+Logging* SecurityPluginFactory::create_logging_plugin(const PropertyPolicy& property_policy)
+{
+    Logging* plugin = nullptr;
+    const std::string* logging_plugin_property = PropertyPolicyHelper::find_property(property_policy,
+            "dds.sec.log.plugin");
+
+    if(logging_plugin_property != nullptr)
+    {
+        if(logging_plugin_property->compare("builtin.DDS_LogTopic") == 0)
+        {
+            plugin = new Logging();
+        }
+    }
+
+    return plugin;
+}
