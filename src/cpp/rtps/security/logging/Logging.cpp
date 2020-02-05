@@ -13,6 +13,30 @@ Logging::Logging()
   //
 }
 
+bool Logging::set_log_options(const LogOptions& log_options, SecurityException& exception)
+{
+  if (logging_enabled_)
+  {
+    exception = SecurityException("Cannot set option after enable_logging called.");
+    return false;
+  }
+
+  //TODO(artivis): assert valid path
+  if (!log_options.log_file.empty() /*&& !is_valid_path(log_options.log_file)*/)
+  {
+    exception = SecurityException("Invalid file path for logging.");
+  }
+
+  log_options_ = log_options;
+
+  if(log_options_.distribute)
+  {
+    //TODO(artivis): set up DataWriter/Publisher
+  }
+
+  return true;
+}
+
 bool Logging::get_log_options(LogOptions& log_options, SecurityException& exception) const
 {
   if (!options_set_)
