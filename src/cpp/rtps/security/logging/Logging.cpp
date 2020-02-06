@@ -28,6 +28,7 @@ bool Logging::set_log_options(const LogOptions& log_options, SecurityException& 
   }
 
   log_options_ = log_options;
+  options_set_ = true;
 
   if(log_options_.distribute)
   {
@@ -41,7 +42,7 @@ bool Logging::get_log_options(LogOptions& log_options, SecurityException& except
 {
   if (!options_set_)
   {
-    exception = SecurityException("LogOptions not set!");
+    exception = SecurityException("Logging options not set!");
     return false;
   }
 
@@ -51,16 +52,15 @@ bool Logging::get_log_options(LogOptions& log_options, SecurityException& except
 
 bool Logging::enable_logging(SecurityException& exception)
 {
-  if (options_set_)
-  {
-    logging_enabled_ = true;
-  }
-  else
+  if (!options_set_)
   {
     exception = SecurityException("Cannot enable logging before logging options are set!");
+    return false;
   }
 
-  return logging_enabled_;
+  logging_enabled_ = true;
+
+  return true;
 }
 
 bool Logging::set_listener(LoggerListener* /*listener*/, SecurityException& exception)
