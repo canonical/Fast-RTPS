@@ -52,7 +52,7 @@ class SecurityPluginFactory
         Cryptography* create_cryptography_plugin(const PropertyPolicy& property_policy);
 
         /**
-         * @brief Create a login plugin described in the PropertyPolicy.
+         * @brief Create a loggin plugin described in the PropertyPolicy.
          * @param property_policy PropertyPolicy containing the definition of the Logging
          * plugin that has to be created.
          * @return Pointer to the new Logging plugin. In case of error nullptr will be returned.
