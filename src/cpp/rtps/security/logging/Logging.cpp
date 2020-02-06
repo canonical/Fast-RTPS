@@ -25,6 +25,7 @@ bool Logging::set_log_options(const LogOptions& log_options, SecurityException& 
   if (!log_options.log_file.empty() /*&& !is_valid_path(log_options.log_file)*/)
   {
     exception = SecurityException("Invalid file path for logging.");
+    return false;
   }
 
   log_options_ = log_options;
@@ -82,7 +83,6 @@ void Logging::log(const EventLogLevel event_log_level,
       log_impl(message, category, exception);
     }
   }
-  //TODO(artivis): throw if not enabled?
 }
 
 void Logging::log_impl(const std::string& /*message*/,
