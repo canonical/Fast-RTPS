@@ -83,6 +83,24 @@ public:
            const std::string& category,
            SecurityException& exception);
 
+  /**
+   * @brief Whether the options are set or not.
+   * @return True if the options are set.
+   */
+  inline bool options_set() const { return options_set_; }
+
+  /**
+   * @brief Whether the logging is enabled or not.
+   * @return True if the logging is enabled.
+   */
+  inline bool enabled() const { return logging_enabled_; }
+
+  /**
+   * @brief Return the LoggerListener.
+   * @return A pointer to the (const) LoggerListener.
+   */
+  inline LoggerListener const* get_listener() const { return listener_; }
+
 protected:
 
   /**
@@ -94,6 +112,8 @@ protected:
   virtual void log_impl(const std::string& message,
                         const std::string& category,
                         SecurityException& exception);
+
+private:
 
   LoggerListener* listener_;
 

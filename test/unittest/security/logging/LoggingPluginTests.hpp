@@ -49,20 +49,32 @@ TEST_F(LoggingPluginTest, DefaultBehavior)
 
   // Options not set
 
+  EXPECT_FALSE(plugin->options_set());
+
   eprosima::fastrtps::rtps::security::LogOptions log_options;
   EXPECT_FALSE(plugin->get_log_options(log_options, exception));
 
   EXPECT_FALSE(plugin->enable_logging(exception));
 
+  EXPECT_FALSE(plugin->enabled());
+
+  EXPECT_EQ(nullptr, plugin->get_listener());
+
   // Options set
 
   EXPECT_TRUE(plugin->set_log_options(log_options, exception));
 
+  EXPECT_TRUE(plugin->options_set());
+
   EXPECT_TRUE(plugin->get_log_options(log_options, exception));
+
+  EXPECT_FALSE(plugin->enabled());
 
   // Logging enabled
 
   EXPECT_TRUE(plugin->enable_logging(exception));
+
+  EXPECT_TRUE(plugin->enabled());
 
   EXPECT_FALSE(plugin->set_log_options(log_options, exception));
 }
