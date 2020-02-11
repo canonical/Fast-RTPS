@@ -34,6 +34,8 @@ namespace fastrtps {
 namespace rtps {
 namespace security {
 
+class Logging;
+
 enum ValidationResult_t : uint32_t
 {
     VALIDATION_OK = 0,
@@ -225,6 +227,13 @@ class Authentication
         virtual bool return_authenticated_peer_credential_token(PermissionsCredentialToken* token,
                 SecurityException& ex) = 0;
 
+        virtual inline bool set_logger(Logging* logger, SecurityException& /*exception*/) { logger_ = logger; return true; }
+
+        virtual inline Logging* get_logger() { return logger_; }
+
+    protected:
+
+        Logging* logger_ = nullptr;
 };
 
 } //namespace security
