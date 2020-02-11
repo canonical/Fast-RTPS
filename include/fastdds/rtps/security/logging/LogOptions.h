@@ -29,6 +29,7 @@ namespace security {
 
 /**
  * @brief The LogOptions struct
+ * @note Definition in DDS-Sec v1.1 8.6.2.1
  */
 struct LogOptions
 {
