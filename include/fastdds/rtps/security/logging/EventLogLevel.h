@@ -18,6 +18,8 @@
 #ifndef _FASTDDS_RTPS_SECURITY_LOGGING_EVENTLOGLEVEL_H_
 #define _FASTDDS_RTPS_SECURITY_LOGGING_EVENTLOGLEVEL_H_
 
+#include "fastdds/rtps/security/exceptions/SecurityException.h"
+
 namespace eprosima {
 namespace fastrtps {
 namespace rtps {
@@ -39,6 +41,53 @@ enum struct EventLogLevel : long
   DEBUG_LEVEL,      // detailed information on the flow of the security events
   TRACE_LEVEL       // even more detailed information
 };
+
+inline bool string_to_EventLogLevel(const std::string& s,
+                                    EventLogLevel& l,
+                                    SecurityException& e)
+{
+  //TODO(artivis): use an array of const char to avoid strings?
+  bool convert = true;
+  if (!bool(s.compare("0")) || !bool(s.compare("FATAL_LEVEL")))
+  {
+    l = EventLogLevel::FATAL_LEVEL;
+  }
+  else if (!s.compare("1") || !s.compare("SEVERE_LEVEL"))
+  {
+    l = EventLogLevel::SEVERE_LEVEL;
+  }
+  else if (!s.compare("2") || !s.compare("ERROR_LEVEL"))
+  {
+    l = EventLogLevel::ERROR_LEVEL;
+  }
+  else if (!s.compare("3") || !s.compare("WARNING_LEVEL"))
+  {
+    l = EventLogLevel::WARNING_LEVEL;
+  }
+  else if (!s.compare("4") || !s.compare("NOTICE_LEVEL"))
+  {
+    l = EventLogLevel::NOTICE_LEVEL;
+  }
+  else if (!s.compare("5") || !s.compare("INFO_LEVEL"))
+  {
+    l = EventLogLevel::INFO_LEVEL;
+  }
+  else if (!s.compare("6") || !s.compare("DEBUG_LEVEL"))
+  {
+    l = EventLogLevel::DEBUG_LEVEL;
+  }
+  else if (!s.compare("7") || !s.compare("TRACE_LEVEL"))
+  {
+    l = EventLogLevel::TRACE_LEVEL;
+  }
+  else
+  {
+    e = SecurityException("Unknown EventLogLevel");
+    convert = false;
+  }
+
+  return convert;
+}
 
 } //namespace security
 } //namespace rtps
