@@ -20,6 +20,7 @@
 #include <fastrtps_deprecated/security/authentication/PKIDH.h>
 #include <fastrtps_deprecated/security/accesscontrol/Permissions.h>
 #include <fastrtps_deprecated/security/cryptography/AESGCMGMAC.h>
+#include <fastdds/rtps/security/logging/BuiltinLogging.h>
 
 using namespace eprosima::fastrtps::rtps;
 using namespace eprosima::fastrtps::rtps::security;
@@ -86,7 +87,7 @@ Logging* SecurityPluginFactory::create_logging_plugin(const PropertyPolicy& prop
     {
         if(logging_plugin_property->compare("builtin.DDS_LogTopic") == 0)
         {
-            plugin = new Logging();
+            plugin = new BuiltinLogging();
         }
     }
 
