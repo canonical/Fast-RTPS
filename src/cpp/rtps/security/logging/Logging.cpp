@@ -89,7 +89,7 @@ void Logging::log_impl(const std::string& /*message*/,
                        const std::string& /*category*/,
                        SecurityException& exception)
 {
-  exception = SecurityException("Not implemented yet.");
+  exception = SecurityException("Logging not implemented.");
 }
 
 } //namespace security

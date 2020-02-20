@@ -111,7 +111,7 @@ protected:
    */
   virtual void log_impl(const std::string& message,
                         const std::string& category,
-                        SecurityException& exception);
+                        SecurityException& exception) = 0;
 
 private:
 
