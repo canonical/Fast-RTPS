@@ -74,7 +74,7 @@ bool Logging::set_listener(LoggerListener* /*listener*/, SecurityException& exce
 void Logging::log(const EventLogLevel event_log_level,
                   const std::string& message,
                   const std::string& category,
-                  SecurityException& exception)
+                  SecurityException& exception) const
 {
   if (logging_enabled_)
   {
@@ -87,7 +87,7 @@ void Logging::log(const EventLogLevel event_log_level,
 
 void Logging::log_impl(const std::string& /*message*/,
                        const std::string& /*category*/,
-                       SecurityException& exception)
+                       SecurityException& exception) const
 {
   exception = SecurityException("Logging not implemented.");
 }

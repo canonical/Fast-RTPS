@@ -53,7 +53,7 @@ private:
    */
   virtual void log_impl(const std::string& message,
                         const std::string& category,
-                        SecurityException& exception) override;
+                        SecurityException& exception) const override;
 
   BuiltinLoggingType convert(Message& msg);
   void publish(BuiltinLoggingType& msg);
@@ -68,7 +68,7 @@ private:
 
   std::thread thread_;
 
-  ConcurrentQueue<MessagePtr> queue_;
+  mutable ConcurrentQueue<MessagePtr> queue_;
 };
 
 } //namespace security

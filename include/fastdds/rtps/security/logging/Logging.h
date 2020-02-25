@@ -81,7 +81,7 @@ public:
   void log(const EventLogLevel event_log_level,
            const std::string& message,
            const std::string& category,
-           SecurityException& exception);
+           SecurityException& exception) const;
 
   /**
    * @brief Whether the options are set or not.
@@ -111,7 +111,7 @@ protected:
    */
   virtual void log_impl(const std::string& message,
                         const std::string& category,
-                        SecurityException& exception) = 0;
+                        SecurityException& exception) const = 0;
 
 private:
 

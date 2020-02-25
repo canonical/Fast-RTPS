@@ -38,12 +38,14 @@ BuiltinLogging::~BuiltinLogging()
   stop();
   queue_.push(std::move(MessagePtr(nullptr)));
   if (thread_.joinable())
+  {
     thread_.join();
+  }
 }
 
 void BuiltinLogging::log_impl(const std::string& message,
                               const std::string& category,
-                              SecurityException& /*exception*/)
+                              SecurityException& /*exception*/) const
 {
   queue_.push(std::move(
     MessagePtr(new Message(message, category)
