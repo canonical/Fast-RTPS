@@ -142,8 +142,8 @@ bool SecurityManager::init(
         log_options.log_file = "";
 
         const auto init_logging_fail = [&](){
-          logInfo(SECURITY, "Logging plugin not configured. Security logging will be disabled.");
-          logInfo(SECURITY, exception.what());
+          logError(SECURITY, "Logging plugin not configured. Security logging will be disabled. ("
+                   << exception.what() << ").");
           delete logging_plugin_;
           logging_plugin_ = nullptr;
           return false;
@@ -205,7 +205,6 @@ bool SecurityManager::init(
 
     if (authentication_plugin_ != nullptr)
     {
-        //TODO(artivis): handle failure? Will it ever fail?
         authentication_plugin_->set_logger(logging_plugin_, exception);
 
         // Validate local participant
