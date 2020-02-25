@@ -23,6 +23,9 @@
 
 namespace eprosima {
 namespace fastrtps {
+
+class Publisher;
+
 namespace rtps {
 namespace security {
 
@@ -113,6 +116,8 @@ protected:
                         const std::string& category,
                         SecurityException& exception) const = 0;
 
+  Publisher* get_publisher() { return publisher_; }
+
 private:
 
   LoggerListener* listener_;
@@ -122,9 +127,8 @@ private:
 
   LogOptions log_options_;
 
-  //TODO(artivis):figure out which to use
-  // Publisher* publisher_; // publisher_ = DomainParticipant::create_publisher(...)
-  // DataWriter* data_writer_;
+  // DomainParticipant::create_publisher(...)
+  Publisher* publisher_;
 };
 
 } //namespace security
