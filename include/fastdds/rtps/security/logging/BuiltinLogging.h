@@ -58,11 +58,7 @@ private:
   BuiltinLoggingType convert(Message& msg);
   void publish(BuiltinLoggingType& msg);
 
-  inline void stop() { stop_ = true; }
-
-  //TODO(artivis):figure out which to use
-  // Publisher* publisher_; // publisher_ = DomainParticipant::create_publisher(...)
-  // DataWriter* data_writer_;
+  void stop() { stop_ = true; }
 
   std::atomic_bool stop_;
 
