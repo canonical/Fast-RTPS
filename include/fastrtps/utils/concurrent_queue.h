@@ -32,7 +32,7 @@ namespace fastrtps {
  * Based on std::queue<T>.
  */
 template<typename T, typename Sequence = std::deque<T>>
-class ConcurrentQueue
+class ConcurrentQueue final
 {
   using Queue = std::queue<T, Sequence>;
 
@@ -64,6 +64,8 @@ public:
 
     std::unique_lock<std::mutex> lock(mutex_);
     queue_.emplace(std::forward<O>(item));
+
+    // Unlock mutex before notifying
     lock.unlock();
 
     has_data_.notify_one();
@@ -81,7 +83,9 @@ public:
     std::lock_guard<std::mutex> lock(mutex_);
 
     if (queue_.empty())
+    {
       return false;
+    }
 
     popped_item = std::move(queue_.front());
     queue_.pop();
@@ -97,10 +101,8 @@ public:
   T wait_pop()
   {
     std::unique_lock<std::mutex> lock(mutex_);
-    while (queue_.empty())
-    {
-      has_data_.wait(lock);
-    }
+
+    has_data_.wait(lock, [&](){ return !queue_.empty(); });
 
     auto popped_item = std::move(queue_.front());
     queue_.pop();
@@ -111,7 +113,8 @@ public:
    * @brief empty.
    * @return true if empty, false othewise.
    */
-  bool empty() const noexcept {
+  bool empty() const noexcept
+  {
     std::lock_guard<std::mutex> lock(mutex_);
     return queue_.empty();
   }
@@ -120,7 +123,8 @@ public:
    * @brief size.
    * @return size of the queue.
    */
-  std::size_t size() const noexcept {
+  std::size_t size() const noexcept
+  {
     std::lock_guard<std::mutex> lock(mutex_);
     return queue_.size();
   }
@@ -130,7 +134,7 @@ protected :
   std::condition_variable has_data_;
   mutable std::mutex mutex_;
 
-  std::queue<T> queue_;
+  Queue queue_;
 };
 
 } // namespace fastrtps
