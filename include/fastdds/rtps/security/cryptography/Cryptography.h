@@ -46,15 +46,17 @@ public:
 
     CryptoTransform* cryptotransform() { return m_cryptotransform; }
 
-    virtual inline bool set_logger(Logging* logger, SecurityException& /*exception*/) { m_logger = logger; return true; }
-
-    virtual inline Logging* get_logger() { return m_logger; }
+    bool set_logger(Logging* logger, SecurityException& /*exception*/) { m_logger = logger; return true; }
 
 protected:
+
+    const Logging* get_logger() { return m_logger; }
 
     CryptoKeyExchange *m_cryptokeyexchange;
     CryptoKeyFactory *m_cryptokeyfactory;
     CryptoTransform *m_cryptotransform;
+
+private:
 
     Logging *m_logger;
 };
