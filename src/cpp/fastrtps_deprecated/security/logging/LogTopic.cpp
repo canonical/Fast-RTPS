@@ -1,11 +1,14 @@
-#include "fastdds/rtps/security/logging/BuiltinLogging.h"
+#include "fastrtps_deprecated/security/logging/LogTopic.h"
+
+#include "fastrtps/publisher/Publisher.h"
+#include "fastrtps/log/Log.h"
 
 namespace eprosima {
 namespace fastrtps {
 namespace rtps {
 namespace security {
 
-BuiltinLogging::BuiltinLogging()
+LogTopic::LogTopic()
   : stop_(false)
   , thread_([this]() {
       BuiltinLoggingType msg;
@@ -33,7 +36,7 @@ BuiltinLogging::BuiltinLogging()
   //
 }
 
-BuiltinLogging::~BuiltinLogging()
+LogTopic::~LogTopic()
 {
   stop();
   queue_.push(std::move(MessagePtr(nullptr)));
@@ -43,7 +46,7 @@ BuiltinLogging::~BuiltinLogging()
   }
 }
 
-void BuiltinLogging::log_impl(const std::string& message,
+void LogTopic::log_impl(const std::string& message,
                               const std::string& category,
                               SecurityException& /*exception*/) const
 {
@@ -52,14 +55,17 @@ void BuiltinLogging::log_impl(const std::string& message,
   )));
 }
 
-BuiltinLoggingType BuiltinLogging::convert(Message& /*msg*/)
+BuiltinLoggingType LogTopic::convert(Message& /*msg*/)
 {
   return BuiltinLoggingType{};
 }
 
-void BuiltinLogging::publish(BuiltinLoggingType& /*msg*/)
+void LogTopic::publish(BuiltinLoggingType& msg)
 {
-  //
+  if (!get_publisher()->write((void*)&msg))
+  {
+    logError(BUILTINLOGGING, "Could not log BuiltinLoggingType message.");
+  }
 }
 
 } //namespace security

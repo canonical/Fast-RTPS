@@ -33,8 +33,8 @@ if(NOT ((MSVC OR MSVC_IDE) AND EPROSIMA_INSTALLER))
 
         add_executable(BuiltinLogging ${COMMON_SOURCES_LOGGING_PLUGIN_TEST_SOURCE}
             ${PROJECT_SOURCE_DIR}/src/cpp/rtps/security/logging/Logging.cpp
-            ${PROJECT_SOURCE_DIR}/src/cpp/rtps/security/logging/BuiltinLogging.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/BuiltinLoggingTests.cpp)
+            ${PROJECT_SOURCE_DIR}/src/cpp/fastrtps_deprecated/security/logging/LogTopic.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/BuiltinLogTopicTests.cpp)
 
         target_compile_definitions(BuiltinLogging PRIVATE FASTRTPS_NO_LIB)
         target_include_directories(BuiltinLogging PRIVATE

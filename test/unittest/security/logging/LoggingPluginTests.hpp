@@ -15,7 +15,7 @@
 #ifndef _UNITTEST_SECURITY_LOGGING_LOGGINGPLUGINTESTS_HPP_
 #define _UNITTEST_SECURITY_LOGGING_LOGGINGPLUGINTESTS_HPP_
 
-#include "../../../../include/fastdds/rtps/security/logging/BuiltinLogging.h"
+#include "../../../../src/cpp/fastrtps_deprecated/security/logging/LogTopic.h"
 #include "../../../../include/fastdds/rtps/attributes/PropertyPolicy.h"
 
 #include <gtest/gtest.h>
@@ -26,7 +26,7 @@ protected:
 
   virtual void SetUp()
   {
-    plugin = new eprosima::fastrtps::rtps::security::BuiltinLogging();
+    plugin = new eprosima::fastrtps::rtps::security::LogTopic();
 
     ASSERT_NE(nullptr, plugin);
   }

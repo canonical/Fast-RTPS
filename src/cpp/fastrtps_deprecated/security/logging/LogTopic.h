@@ -15,8 +15,8 @@
 /*!
  * @file Logging.h
  */
-#ifndef _FASTDDS_RTPS_SECURITY_LOGGING_BUILTINLOGGING_H_
-#define _FASTDDS_RTPS_SECURITY_LOGGING_BUILTINLOGGING_H_
+#ifndef _FASTDDS_RTPS_SECURITY_LOGGING_LOGTOPIC_H_
+#define _FASTDDS_RTPS_SECURITY_LOGGING_LOGTOPIC_H_
 
 #include "fastdds/rtps/security/logging/Logging.h"
 #include "fastdds/rtps/security/logging/BuiltinLoggingType.h"
@@ -31,17 +31,17 @@ namespace rtps {
 namespace security {
 
 /**
- * @brief BuiltinLogging
+ * @brief LogTopic
  */
-class BuiltinLogging final : public Logging
+class LogTopic final : public Logging
 {
   using Message = std::pair<std::string,std::string>;
   using MessagePtr = std::unique_ptr<Message>;
 
 public:
 
-  BuiltinLogging();
-  ~BuiltinLogging();
+  LogTopic();
+  ~LogTopic();
 
 private:
 
@@ -72,4 +72,4 @@ private:
 } //namespace fastrtps
 } //namespace eprosima
 
-#endif // _FASTDDS_RTPS_SECURITY_LOGGING_BUILTINLOGGING_H_
+#endif // _FASTDDS_RTPS_SECURITY_LOGGING_LOGTOPIC_H_
