@@ -127,7 +127,7 @@ bool SecurityManager::init(
 
     const PropertyPolicy log_properties = PropertyPolicyHelper::get_properties_with_prefix(
           participant_->getRTPSParticipantAttributes().properties,
-          "dds.sec.log.plugin.builtin.DDS_LogTopic.");
+          "dds.sec.log.builtin.DDS_LogTopic.");
 
     // length(log_properties) == 0 considered as logging disable.
     if (PropertyPolicyHelper::length(log_properties) > 0)
