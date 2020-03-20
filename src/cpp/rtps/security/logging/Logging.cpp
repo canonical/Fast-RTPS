@@ -80,13 +80,54 @@ void Logging::log(const EventLogLevel event_log_level,
   {
     if (event_log_level <= log_options_.event_log_level)
     {
-      log_impl(message, category, exception);
+      BuiltinLoggingType builtin_msg;
+
+      if (!convert(event_log_level, message, category, builtin_msg, exception))
+      {
+        return;
+      }
+
+      log_impl(builtin_msg, exception);
     }
   }
 }
 
-void Logging::log_impl(const std::string& /*message*/,
-                       const std::string& /*category*/,
+bool Logging::convert(const EventLogLevel event_log_level,
+                      const std::string& message,
+                      const std::string& category,
+                      BuiltinLoggingType& builtin_msg,
+                      SecurityException& /*exception*/) const
+{
+  rtps::Time_t::now(builtin_msg.timestamp);
+
+  builtin_msg.facility = 0;
+  builtin_msg.severity = event_log_level;
+  builtin_msg.message = message;
+
+  std::string plugin_class;
+  std::string plugin_method;
+
+  const std::size_t pos = category.find(',');
+
+  if (pos != std::string::npos)
+  {
+    plugin_class = category.substr(0, pos);
+    plugin_method = category.substr(pos+1);
+  }
+
+  builtin_msg.structured_data.emplace(
+        "DDS",
+        NameValuePairSeq{NameValuePair{"guid", ""},
+                         NameValuePair{"domain_id", ""},
+                         NameValuePair{"plugin_class", plugin_class},
+                         NameValuePair{"plugin_method", plugin_method}}
+  );
+
+//  exception = SecurityException("Logging not implemented.");
+  return true;
+}
+
+void Logging::log_impl(const BuiltinLoggingType& /*message*/,
                        SecurityException& exception) const
 {
   exception = SecurityException("Logging not implemented.");

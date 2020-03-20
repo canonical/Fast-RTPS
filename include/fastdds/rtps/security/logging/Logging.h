@@ -19,6 +19,7 @@
 #define _FASTDDS_RTPS_SECURITY_LOGGING_LOGGING_H_
 
 #include "fastdds/rtps/security/logging/LogOptions.h"
+#include "fastdds/rtps/security/logging/BuiltinLoggingType.h"
 #include "fastdds/rtps/security/exceptions/SecurityException.h"
 
 namespace eprosima {
@@ -107,13 +108,23 @@ public:
 protected:
 
   /**
+   * @brief convert
+   * @param msg
+   * @return
+   */
+  virtual bool convert(const EventLogLevel event_log_level,
+                       const std::string& message,
+                       const std::string& category,
+                       BuiltinLoggingType& builtin_msg,
+                       SecurityException& exception) const;
+
+  /**
    * @brief log_impl
    * @param message
    * @param category
    * @param exception
    */
-  virtual void log_impl(const std::string& message,
-                        const std::string& category,
+  virtual void log_impl(const BuiltinLoggingType& message,
                         SecurityException& exception) const = 0;
 
   Publisher* get_publisher() { return publisher_; }

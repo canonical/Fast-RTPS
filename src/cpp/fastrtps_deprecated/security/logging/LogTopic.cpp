@@ -11,12 +11,11 @@ namespace security {
 LogTopic::LogTopic()
   : stop_(false)
   , thread_([this]() {
-      BuiltinLoggingType msg;
       for (;;)
       {
         // Put the thread asleep until there is
         // something to process
-        MessagePtr p = queue_.wait_pop();
+        auto p = queue_.wait_pop();
 
         if (!p)
         {
@@ -27,9 +26,7 @@ LogTopic::LogTopic()
           continue;
         }
 
-        msg = convert(*p);
-
-        publish(msg);
+        publish(*p);
       }
     })
 {
@@ -39,25 +36,19 @@ LogTopic::LogTopic()
 LogTopic::~LogTopic()
 {
   stop();
-  queue_.push(std::move(MessagePtr(nullptr)));
+  queue_.push(std::move(BuiltinLoggingTypePtr(nullptr)));
   if (thread_.joinable())
   {
     thread_.join();
   }
 }
 
-void LogTopic::log_impl(const std::string& message,
-                              const std::string& category,
-                              SecurityException& /*exception*/) const
+void LogTopic::log_impl(const BuiltinLoggingType& message,
+                        SecurityException& /*exception*/) const
 {
   queue_.push(std::move(
-    MessagePtr(new Message(message, category)
+    BuiltinLoggingTypePtr(new BuiltinLoggingType(message)
   )));
-}
-
-BuiltinLoggingType LogTopic::convert(Message& /*msg*/)
-{
-  return BuiltinLoggingType{};
 }
 
 void LogTopic::publish(BuiltinLoggingType& msg)

@@ -35,8 +35,7 @@ namespace security {
  */
 class LogTopic final : public Logging
 {
-  using Message = std::pair<std::string,std::string>;
-  using MessagePtr = std::unique_ptr<Message>;
+  using BuiltinLoggingTypePtr = std::unique_ptr<BuiltinLoggingType>;
 
 public:
 
@@ -51,11 +50,9 @@ private:
    * @param category
    * @param exception
    */
-  virtual void log_impl(const std::string& message,
-                        const std::string& category,
+  virtual void log_impl(const BuiltinLoggingType& message,
                         SecurityException& exception) const override;
 
-  BuiltinLoggingType convert(Message& msg);
   void publish(BuiltinLoggingType& msg);
 
   void stop() { stop_ = true; }
@@ -64,7 +61,7 @@ private:
 
   std::thread thread_;
 
-  mutable ConcurrentQueue<MessagePtr> queue_;
+  mutable ConcurrentQueue<BuiltinLoggingTypePtr> queue_;
 };
 
 } //namespace security
