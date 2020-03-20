@@ -20,7 +20,8 @@
 
 #include "fastdds/rtps/common/Types.h"
 #include "fastdds/rtps/common/Time_t.h"
-#include "fastdds/rtps/security/logging/LoggingLevel.h"
+//#include "fastdds/rtps/security/logging/LoggingLevel.h"
+#include "fastdds/rtps/security/logging/EventLogLevel.h"
 #include "fastdds/rtps/security/logging/NameValuePair.h"
 
 #include <map>
@@ -37,7 +38,8 @@ namespace security {
  */
 struct BuiltinLoggingType final {
  octet facility;              // Set to 0x0A (10). Indicates sec/auth msgs
- LoggingLevel severity;
+// LoggingLevel severity;
+ EventLogLevel severity;
  rtps::Time_t timestamp;      // Since epoch 1970-01-01 00:00:00 +0000 (UTC)
  std::string hostname;        // IP host name of originator
  std::string hostip;          // IP address of originator
