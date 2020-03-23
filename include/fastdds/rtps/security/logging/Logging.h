@@ -110,7 +110,7 @@ public:
 
   bool set_guid(const GUID_t& guid, SecurityException& exception);
 
-  bool set_domaine_id(const uint32_t id, SecurityException& exception);
+  bool set_domain_id(const uint32_t id, SecurityException& exception);
 
 protected:
 

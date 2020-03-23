@@ -156,7 +156,7 @@ bool Logging::set_guid(const GUID_t& guid, SecurityException& exception)
   return true;
 }
 
-bool Logging::set_domaine_id(const uint32_t id, SecurityException& exception)
+bool Logging::set_domain_id(const uint32_t id, SecurityException& exception)
 {
   if (std::numeric_limits<uint32_t>::max() == id)
   {

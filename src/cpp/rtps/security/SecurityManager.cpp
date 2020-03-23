@@ -187,7 +187,7 @@ bool SecurityManager::init(
         }
 
         if (!(logging_plugin_->set_guid(participant_->getGuid(), exception) &&
-              logging_plugin_->set_domaine_id(domain_id_, exception)))
+              logging_plugin_->set_domain_id(domain_id_, exception)))
         {
           return init_logging_fail();
         }
