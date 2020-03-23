@@ -18,9 +18,12 @@
 #ifndef _FASTDDS_RTPS_SECURITY_LOGGING_LOGGING_H_
 #define _FASTDDS_RTPS_SECURITY_LOGGING_LOGGING_H_
 
+#include <limits>
+
 #include "fastdds/rtps/security/logging/LogOptions.h"
 #include "fastdds/rtps/security/logging/BuiltinLoggingType.h"
 #include "fastdds/rtps/security/exceptions/SecurityException.h"
+#include "fastdds/rtps/common/Guid.h"
 
 namespace eprosima {
 namespace fastrtps {
@@ -105,6 +108,10 @@ public:
    */
   LoggerListener const* get_listener() const { return listener_; }
 
+  bool set_guid(const GUID_t& guid, SecurityException& exception);
+
+  bool set_domaine_id(const uint32_t id, SecurityException& exception);
+
 protected:
 
   /**
@@ -137,6 +144,10 @@ private:
   bool options_set_ = false;
 
   LogOptions log_options_;
+  GUID_t guid_;
+  std::string guid_str_;
+  uint32_t domain_id_ = std::numeric_limits<uint32_t>::max();
+  std::string domain_id_str_;
 
   // DomainParticipant::create_publisher(...)
   Publisher* publisher_;

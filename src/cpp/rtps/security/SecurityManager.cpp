@@ -125,6 +125,8 @@ bool SecurityManager::init(
 
     SecurityException exception;
 
+    domain_id_ = participant_->getRTPSParticipantAttributes().builtin.domainId;
+
     const PropertyPolicy log_properties = PropertyPolicyHelper::get_properties_with_prefix(
           participant_->getRTPSParticipantAttributes().properties,
           "dds.sec.log.builtin.DDS_LogTopic.");
@@ -184,6 +186,12 @@ bool SecurityManager::init(
           logInfo(SECURITY, "Logging to file is not yet implemented.");
         }
 
+        if (!(logging_plugin_->set_guid(participant_->getGuid(), exception) &&
+              logging_plugin_->set_domaine_id(domain_id_, exception)))
+        {
+          return init_logging_fail();
+        }
+
         if (!( logging_plugin_->set_log_options(log_options, exception) &&
                logging_plugin_->enable_logging(exception) ))
         {
@@ -198,8 +206,6 @@ bool SecurityManager::init(
         logInfo(SECURITY, "Could not create logging plugin. Security logging will be disabled.");
       }
     }
-
-    domain_id_ = participant_->getRTPSParticipantAttributes().builtin.domainId;
 
     authentication_plugin_ = factory_.create_authentication_plugin(participant_properties);
 

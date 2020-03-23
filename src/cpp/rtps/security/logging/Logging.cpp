@@ -117,8 +117,8 @@ bool Logging::convert(const EventLogLevel event_log_level,
 
   builtin_msg.structured_data.emplace(
         "DDS",
-        NameValuePairSeq{NameValuePair{"guid", ""},
-                         NameValuePair{"domain_id", ""},
+        NameValuePairSeq{NameValuePair{"guid", guid_str_},
+                         NameValuePair{"domain_id", domain_id_str_},
                          NameValuePair{"plugin_class", plugin_class},
                          NameValuePair{"plugin_method", plugin_method}}
   );
@@ -131,6 +131,48 @@ void Logging::log_impl(const BuiltinLoggingType& /*message*/,
                        SecurityException& exception) const
 {
   exception = SecurityException("Logging not implemented.");
+}
+
+bool Logging::set_guid(const GUID_t& guid, SecurityException& exception)
+{
+  if (GUID_t::unknown() == guid)
+  {
+    exception = SecurityException("Invalid guid value.");
+    return false;
+  }
+  else if (GUID_t::unknown() != guid_)
+  {
+    exception = SecurityException("Guid already set.");
+    return false;
+  }
+
+  guid_ = guid;
+
+  std::stringstream ss;
+  ss << guid_;
+
+  guid_str_ = ss.str();
+
+  return true;
+}
+
+bool Logging::set_domaine_id(const uint32_t id, SecurityException& exception)
+{
+  if (std::numeric_limits<uint32_t>::max() == id)
+  {
+    exception = SecurityException("Invalid domaine id value.");
+    return false;
+  }
+  else if (std::numeric_limits<uint32_t>::max() == domain_id_)
+  {
+    exception = SecurityException("Domaine id already set (" + std::to_string(domain_id_) + ")");
+    return false;
+  }
+
+  domain_id_ = id;
+  domain_id_str_ = std::to_string(domain_id_);
+
+  return true;
 }
 
 } //namespace security
