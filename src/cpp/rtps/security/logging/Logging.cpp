@@ -21,17 +21,10 @@ bool Logging::set_log_options(const LogOptions& log_options, SecurityException& 
     return false;
   }
 
-  //TODO(artivis): assert valid path
-  if (!log_options.log_file.empty() /*&& !is_valid_path(log_options.log_file)*/)
-  {
-    exception = SecurityException("Invalid file path for logging.");
-    return false;
-  }
-
   log_options_ = log_options;
   options_set_ = true;
 
-  if(log_options_.distribute)
+  if (log_options_.distribute)
   {
     //TODO(artivis): set up DataWriter/Publisher
   }
@@ -101,7 +94,7 @@ bool Logging::convert(const EventLogLevel event_log_level,
                       const std::string& message,
                       const std::string& category,
                       BuiltinLoggingType& builtin_msg,
-                      SecurityException& /*exception*/) const
+                      SecurityException& exception) const
 {
   rtps::Time_t::now(builtin_msg.timestamp);
 
@@ -119,6 +112,11 @@ bool Logging::convert(const EventLogLevel event_log_level,
     plugin_class = category.substr(0, pos);
     plugin_method = category.substr(pos+1);
   }
+  else
+  {
+    exception = SecurityException("Could not find expected separator.");
+    return false;
+  }
 
   builtin_msg.structured_data.emplace(
         "DDS",
@@ -128,7 +126,6 @@ bool Logging::convert(const EventLogLevel event_log_level,
                          NameValuePair{"plugin_method", plugin_method}}
   );
 
-//  exception = SecurityException("Logging not implemented.");
   return true;
 }
 
@@ -168,7 +165,7 @@ bool Logging::set_domain_id(const uint32_t id, SecurityException& exception)
     exception = SecurityException("Invalid domaine id value.");
     return false;
   }
-  else if (std::numeric_limits<uint32_t>::max() == domain_id_)
+  else if (std::numeric_limits<uint32_t>::max() != domain_id_)
   {
     exception = SecurityException("Domaine id already set (" + std::to_string(domain_id_) + ")");
     return false;
