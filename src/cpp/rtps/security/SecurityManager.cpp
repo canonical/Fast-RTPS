@@ -181,7 +181,7 @@ bool SecurityManager::init(
         const std::string* const log_file = PropertyPolicyHelper::find_property(log_properties, "log_file");
         if (log_file != nullptr)
         {
-          //log_options.log_file = *log_file;
+          log_options.log_file = *log_file;
           //TODO(artivis): Check path
           logInfo(SECURITY, "Logging to file is not yet implemented.");
         }

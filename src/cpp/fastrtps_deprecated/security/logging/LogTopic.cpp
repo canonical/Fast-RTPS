@@ -41,6 +41,11 @@ LogTopic::~LogTopic()
   {
     thread_.join();
   }
+
+  if (file_stream_.is_open())
+  {
+    file_stream_.close();
+  }
 }
 
 void LogTopic::log_impl(const BuiltinLoggingType& message,
@@ -51,12 +56,41 @@ void LogTopic::log_impl(const BuiltinLoggingType& message,
   )));
 }
 
-void LogTopic::publish(BuiltinLoggingType& msg)
+bool LogTopic::enable_logging_impl(SecurityException& exception)
 {
-  if (!get_publisher()->write((void*)&msg))
+  LogOptions options;
+  if (!get_log_options(options, exception))
   {
-    logError(BUILTINLOGGING, "Could not log BuiltinLoggingType message.");
+    return false;
   }
+
+  file_stream_.open(options.log_file, std::ios::out | std::ios::app);
+
+  if ( (file_stream_.rdstate() & std::ofstream::failbit ) != 0 )
+  {
+    exception = SecurityException("Error opening file: " + options.log_file);
+    return false;
+  }
+
+  return true;
+}
+
+void LogTopic::publish(BuiltinLoggingType& builtin_msg)
+{
+  SecurityException exception;
+  if (!compose_header(file_stream_, builtin_msg, exception))
+  {
+    return;
+  }
+
+  file_stream_ << " : " << builtin_msg.message << "\n";
+  file_stream_.flush();
+
+  //TODO(artivis) this crashes badly
+//  if (!get_publisher()->write((void*)&msg))
+//  {
+//    logError(LOGTOPIC, "Could not log BuiltinLoggingType message.");
+//  }
 }
 
 } //namespace security

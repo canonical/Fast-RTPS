@@ -22,8 +22,9 @@
 #include "fastdds/rtps/security/logging/BuiltinLoggingType.h"
 #include "fastrtps/utils/concurrent_queue.h"
 
-#include <thread>
 #include <atomic>
+#include <fstream>
+#include <thread>
 
 namespace eprosima {
 namespace fastrtps {
@@ -50,16 +51,20 @@ private:
    * @param category
    * @param exception
    */
-  virtual void log_impl(const BuiltinLoggingType& message,
-                        SecurityException& exception) const override;
+  void log_impl(const BuiltinLoggingType& message,
+                SecurityException& exception) const override;
 
-  void publish(BuiltinLoggingType& msg);
+  bool enable_logging_impl(SecurityException& exception) override;
+
+  void publish(BuiltinLoggingType& builtin_msg);
 
   void stop() { stop_ = true; }
 
   std::atomic_bool stop_;
 
   std::thread thread_;
+
+  std::ofstream file_stream_;
 
   mutable ConcurrentQueue<BuiltinLoggingTypePtr> queue_;
 };
