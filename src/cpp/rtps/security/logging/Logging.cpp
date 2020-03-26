@@ -59,6 +59,11 @@ bool Logging::enable_logging(SecurityException& exception)
     return false;
   }
 
+  if (!enable_logging_impl(exception))
+  {
+    return false;
+  }
+
   logging_enabled_ = true;
 
   return true;

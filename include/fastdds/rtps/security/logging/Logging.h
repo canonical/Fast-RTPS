@@ -115,6 +115,12 @@ public:
 protected:
 
   /**
+   * @brief enable_logging_impl
+   * @return
+   */
+  virtual bool enable_logging_impl(SecurityException& /*exception*/) { return true; }
+
+  /**
    * @brief convert
    * @param msg
    * @return
