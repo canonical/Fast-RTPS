@@ -131,6 +131,11 @@ protected:
                        BuiltinLoggingType& builtin_msg,
                        SecurityException& exception) const;
 
+  template <typename Stream>
+  bool compose_header(Stream& header,
+                      const BuiltinLoggingType& builtin_msg,
+                      SecurityException& exception) const;
+
   /**
    * @brief log_impl
    * @param message
@@ -158,6 +163,26 @@ private:
   // DomainParticipant::create_publisher(...)
   Publisher* publisher_;
 };
+
+template <typename Stream>
+bool Logging::compose_header(Stream& header,
+                             const BuiltinLoggingType& builtin_msg,
+                             SecurityException& exception) const
+{
+  const auto it = builtin_msg.structured_data.find("DDS");
+
+  if (builtin_msg.structured_data.end() == it)
+  {
+    exception = SecurityException("Could not find expected DDS field.");
+    return false;
+  }
+
+  header << "[" << builtin_msg.timestamp << "] " << it->second.at(0).value
+         << " " << it->second.at(1).value << " " << it->second.at(2).value
+         << ":" << it->second.at(3).value;
+
+  return true;
+}
 
 } //namespace security
 } //namespace rtps
