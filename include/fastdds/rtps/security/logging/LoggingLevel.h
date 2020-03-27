@@ -18,6 +18,8 @@
 #ifndef _FASTDDS_RTPS_SECURITY_LOGGING_LOGGINGLEVEL_H_
 #define _FASTDDS_RTPS_SECURITY_LOGGING_LOGGINGLEVEL_H_
 
+#include "fastdds/rtps/security/exceptions/SecurityException.h"
+
 namespace eprosima {
 namespace fastrtps {
 namespace rtps {
@@ -39,6 +41,53 @@ enum struct LoggingLevel : long
   INFORMATIONAL_LEVEL,  // Normal operational. Requires no action.
   DEBUG_LEVEL
 };
+
+inline bool string_to_LogLevel(const std::string& s,
+                               LoggingLevel& l,
+                               SecurityException& e)
+{
+  //TODO(artivis): use an array of const char to avoid strings?
+  bool convert = true;
+  if (!bool(s.compare("0")) || !bool(s.compare("EMERGENCY_LEVEL")))
+  {
+    l = LoggingLevel::EMERGENCY_LEVEL;
+  }
+  else if (!s.compare("1") || !s.compare("ALERT_LEVEL"))
+  {
+    l = LoggingLevel::ALERT_LEVEL;
+  }
+  else if (!s.compare("2") || !s.compare("CRITICAL_LEVEL"))
+  {
+    l = LoggingLevel::CRITICAL_LEVEL;
+  }
+  else if (!s.compare("3") || !s.compare("ERROR_LEVEL"))
+  {
+    l = LoggingLevel::ERROR_LEVEL;
+  }
+  else if (!s.compare("4") || !s.compare("WARNING_LEVEL"))
+  {
+    l = LoggingLevel::WARNING_LEVEL;
+  }
+  else if (!s.compare("5") || !s.compare("NOTICE_LEVEL"))
+  {
+    l = LoggingLevel::NOTICE_LEVEL;
+  }
+  else if (!s.compare("6") || !s.compare("INFORMATIONAL_LEVEL"))
+  {
+    l = LoggingLevel::INFORMATIONAL_LEVEL;
+  }
+  else if (!s.compare("7") || !s.compare("DEBUG_LEVEL"))
+  {
+    l = LoggingLevel::DEBUG_LEVEL;
+  }
+  else
+  {
+    e = SecurityException("Unknown EventLogLevel");
+    convert = false;
+  }
+
+  return convert;
+}
 
 } //namespace security
 } //namespace rtps

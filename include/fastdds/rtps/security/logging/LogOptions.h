@@ -20,7 +20,7 @@
 
 #include <string>
 
-#include "fastdds/rtps/security/logging/EventLogLevel.h"
+#include "fastdds/rtps/security/logging/LoggingLevel.h"
 
 namespace eprosima {
 namespace fastrtps {
@@ -38,7 +38,7 @@ struct LogOptions
 
   //! Level at which log messages will be logged.
   //! Messages at or below the log_level are logged.
-  EventLogLevel event_log_level;
+  LoggingLevel log_level;
 
   //! Full path to a local file
   std::string log_file;

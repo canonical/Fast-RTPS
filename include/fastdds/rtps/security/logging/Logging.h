@@ -86,7 +86,7 @@ public:
    * @param message
    * @param category
    */
-  void log(const EventLogLevel event_log_level,
+  void log(const LoggingLevel log_level,
            const std::string& message,
            const std::string& category,
            SecurityException& exception) const;
@@ -126,7 +126,7 @@ protected:
    * @param msg
    * @return
    */
-  virtual bool convert(const EventLogLevel event_log_level,
+  virtual bool convert(const LoggingLevel log_level,
                        const std::string& message,
                        const std::string& category,
                        BuiltinLoggingType& builtin_msg,

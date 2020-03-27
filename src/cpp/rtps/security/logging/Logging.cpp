@@ -69,18 +69,18 @@ bool Logging::set_listener(LoggerListener* /*listener*/, SecurityException& exce
   return false;
 }
 
-void Logging::log(const EventLogLevel event_log_level,
+void Logging::log(const LoggingLevel log_level,
                   const std::string& message,
                   const std::string& category,
                   SecurityException& exception) const
 {
   if (logging_enabled_)
   {
-    if (event_log_level <= log_options_.event_log_level)
+    if (log_level <= log_options_.log_level)
     {
       BuiltinLoggingType builtin_msg;
 
-      if (!convert(event_log_level, message, category, builtin_msg, exception))
+      if (!convert(log_level, message, category, builtin_msg, exception))
       {
         return;
       }
@@ -90,7 +90,7 @@ void Logging::log(const EventLogLevel event_log_level,
   }
 }
 
-bool Logging::convert(const EventLogLevel event_log_level,
+bool Logging::convert(const LoggingLevel log_level,
                       const std::string& message,
                       const std::string& category,
                       BuiltinLoggingType& builtin_msg,
@@ -99,7 +99,7 @@ bool Logging::convert(const EventLogLevel event_log_level,
   rtps::Time_t::now(builtin_msg.timestamp);
 
   builtin_msg.facility = 0;
-  builtin_msg.severity = event_log_level;
+  builtin_msg.severity = log_level;
   builtin_msg.message = message;
 
   std::string plugin_class;

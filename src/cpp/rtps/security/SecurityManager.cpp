@@ -140,7 +140,7 @@ bool SecurityManager::init(
       {
         LogOptions log_options;
         log_options.distribute = true; //TODO(artivis): defaults to true until log to file is implemented.
-        log_options.event_log_level = EventLogLevel::ERROR_LEVEL;
+        log_options.log_level = LoggingLevel::ERROR_LEVEL;
         log_options.log_file = "";
 
         const auto init_logging_fail = [&](){
@@ -169,10 +169,10 @@ bool SecurityManager::init(
           }
         }
 
-        const std::string* const event_log_level = PropertyPolicyHelper::find_property(log_properties, "event_log_level");
-        if (event_log_level != nullptr)
+        const std::string* const log_level = PropertyPolicyHelper::find_property(log_properties, "logging_level");
+        if (log_level != nullptr)
         {
-          if (!string_to_EventLogLevel(*event_log_level, log_options.event_log_level, exception))
+          if (!string_to_LogLevel(*log_level, log_options.log_level, exception))
           {
             return init_logging_fail();
           }
