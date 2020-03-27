@@ -19,6 +19,7 @@
 #define _FASTDDS_RTPS_SECURITY_LOGGING_LOGGING_H_
 
 #include <limits>
+#include <iomanip>
 
 #include "fastdds/rtps/security/logging/LogOptions.h"
 #include "fastdds/rtps/security/logging/BuiltinLoggingType.h"
@@ -177,7 +178,8 @@ bool Logging::compose_header(Stream& header,
     return false;
   }
 
-  header << "[" << builtin_msg.timestamp << "] " << it->second.at(0).value
+  header << "[" << std::setprecision (std::numeric_limits<double>::digits10 + 1)
+         << builtin_msg.timestamp << "] " << it->second.at(0).value
          << " " << it->second.at(1).value << " " << it->second.at(2).value
          << ":" << it->second.at(3).value;
 
