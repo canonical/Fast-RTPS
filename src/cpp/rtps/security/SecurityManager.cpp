@@ -139,7 +139,7 @@ bool SecurityManager::init(
       if (logging_plugin_ != nullptr)
       {
         LogOptions log_options;
-        log_options.distribute = true; //TODO(artivis): defaults to true until log to file is implemented.
+        log_options.distribute = false;
         log_options.log_level = LoggingLevel::ERROR_LEVEL;
         log_options.log_file = "";
 
@@ -182,8 +182,6 @@ bool SecurityManager::init(
         if (log_file != nullptr)
         {
           log_options.log_file = *log_file;
-          //TODO(artivis): Check path
-          logInfo(SECURITY, "Logging to file is not yet implemented.");
         }
 
         if (!(logging_plugin_->set_guid(participant_->getGuid(), exception) &&
