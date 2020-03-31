@@ -85,12 +85,6 @@ void LogTopic::publish(BuiltinLoggingType& builtin_msg)
 
   file_stream_ << " : " << builtin_msg.message << "\n";
   file_stream_.flush();
-
-  //TODO(artivis) this crashes badly
-//  if (!get_publisher()->write((void*)&msg))
-//  {
-//    logError(LOGTOPIC, "Could not log BuiltinLoggingType message.");
-//  }
 }
 
 } //namespace security

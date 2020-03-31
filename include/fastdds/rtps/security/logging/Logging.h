@@ -146,8 +146,6 @@ protected:
   virtual void log_impl(const BuiltinLoggingType& message,
                         SecurityException& exception) const = 0;
 
-  Publisher* get_publisher() { return publisher_; }
-
 private:
 
   LoggerListener* listener_;
@@ -160,9 +158,6 @@ private:
   std::string guid_str_;
   uint32_t domain_id_ = std::numeric_limits<uint32_t>::max();
   std::string domain_id_str_;
-
-  // DomainParticipant::create_publisher(...)
-  Publisher* publisher_;
 };
 
 template <typename Stream>
