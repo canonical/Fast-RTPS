@@ -143,7 +143,7 @@ bool SecurityManager::init(
         log_options.log_level = LoggingLevel::ERROR_LEVEL;
         log_options.log_file = "";
 
-        const auto init_logging_fail = [&](){
+        const auto init_logging_fail = [this](SecurityException& exception){
           logError(SECURITY, "Logging plugin not configured. Security logging will be disabled. ("
                    << exception.what() << ").");
           delete logging_plugin_;
@@ -165,7 +165,7 @@ bool SecurityManager::init(
           else
           {
             exception = SecurityException("Unknown value '" + *distribute + "' for LogOptions::distribute.");
-            return init_logging_fail();
+            return init_logging_fail(exception);
           }
         }
 
@@ -174,7 +174,7 @@ bool SecurityManager::init(
         {
           if (!string_to_LogLevel(*log_level, log_options.log_level, exception))
           {
-            return init_logging_fail();
+            return init_logging_fail(exception);
           }
         }
 
@@ -187,13 +187,13 @@ bool SecurityManager::init(
         if (!(logging_plugin_->set_guid(participant_->getGuid(), exception) &&
               logging_plugin_->set_domain_id(domain_id_, exception)))
         {
-          return init_logging_fail();
+          return init_logging_fail(exception);
         }
 
         if (!( logging_plugin_->set_log_options(log_options, exception) &&
                logging_plugin_->enable_logging(exception) ))
         {
-          return init_logging_fail();
+          return init_logging_fail(exception);
         }
       }
       else
