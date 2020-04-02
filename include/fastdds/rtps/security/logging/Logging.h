@@ -186,4 +186,63 @@ bool Logging::compose_header(Stream& header,
 } //namespace fastrtps
 } //namespace eprosima
 
+
+// gcc expands __VA_ARGS___ before passing it into the macro.
+// Visual Studio expands __VA_ARGS__ after passing it.
+// This macro is a workaround to support both
+#define __FASTRTPS_EXPAND(x) x
+
+#define __FASTRTPS_SECURITY_LOGGING(LEVEL, CLASS, MESSAGE, EXCEPTION) \
+  do {                                                                \
+    auto logger = get_logger();                             \
+    if (logger) {                                           \
+      logger->log(LEVEL,                                    \
+                  MESSAGE,                                  \
+                  std::string(CLASS",")+__func__,           \
+                  EXCEPTION);                               \
+    } else {                                                \
+      switch (LEVEL) {                                      \
+        case LoggingLevel::EMERGENCY_LEVEL:                 \
+        case LoggingLevel::ALERT_LEVEL:                     \
+        case LoggingLevel::CRITICAL_LEVEL:                  \
+        case LoggingLevel::ERROR_LEVEL:                     \
+          logError(SECURITY, MESSAGE);                      \
+          break;                                            \
+        case LoggingLevel::WARNING_LEVEL:                   \
+          logWarning(SECURITY, MESSAGE);                    \
+          break;                                            \
+        case LoggingLevel::NOTICE_LEVEL:                    \
+        case LoggingLevel::INFORMATIONAL_LEVEL:             \
+        case LoggingLevel::DEBUG_LEVEL:                     \
+           logInfo(SECURITY, MESSAGE);                      \
+           break;                                           \
+      }                                                     \
+    }                                                       \
+  } while (0);
+
+#define __FASTRTPS_SECURITY_LOGGING_EX(LEVEL, CLASS, MESSAGE)         \
+  do {                                                                \
+    eprosima::fastrtps::rtps::security::SecurityException lexception; \
+    __FASTRTPS_SECURITY_LOGGING(LEVEL, CLASS, MESSAGE, lexception);   \
+  } while (0);
+
+#define __FASTRTPS_MACRO_SELECTOR(_1,_2,_3,_4,NAME,...) NAME
+
+#define SECURITY_LOGGING(...)                                 \
+  __FASTRTPS_EXPAND(                                          \
+    __FASTRTPS_MACRO_SELECTOR(__VA_ARGS__,                    \
+                              __FASTRTPS_SECURITY_LOGGING,    \
+                              __FASTRTPS_SECURITY_LOGGING_EX, \
+                              _UNUSED)(__VA_ARGS__) )
+
+#define EMERGENCY_SECURITY_LOGGING(...)     SECURITY_LOGGING(LoggingLevel::EMERGENCY_LEVEL, __VA_ARGS__)
+#define ALERT_SECURITY_LOGGING(...)         SECURITY_LOGGING(LoggingLevel::ALERT_LEVEL, __VA_ARGS__)
+#define CRITICAL_SECURITY_LOGGING(...)      SECURITY_LOGGING(LoggingLevel::CRITICAL_LEVEL, __VA_ARGS__)
+#define ERROR_SECURITY_LOGGING(...)         SECURITY_LOGGING(LoggingLevel::ERROR_LEVEL, __VA_ARGS__)
+#define WARNING_SECURITY_LOGGING(...)       SECURITY_LOGGING(LoggingLevel::WARNING_LEVEL, __VA_ARGS__)
+#define NOTICE_SECURITY_LOGGING(...)        SECURITY_LOGGING(LoggingLevel::NOTICE_LEVEL, __VA_ARGS__)
+#define INFORMATIONAL_SECURITY_LOGGING(...) SECURITY_LOGGING(LoggingLevel::INFORMATIONAL_LEVEL, __VA_ARGS__)
+#define DEBUG_SECURITY_LOGGING(...)         SECURITY_LOGGING(LoggingLevel::DEBUG_LEVEL, __VA_ARGS__)
+
+
 #endif // _FASTDDS_RTPS_SECURITY_LOGGING_LOGGING_H_
