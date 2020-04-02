@@ -176,7 +176,7 @@ bool Logging::compose_header(Stream& header,
   header << "[" << std::setprecision (std::numeric_limits<double>::digits10 + 1)
          << builtin_msg.timestamp << "] " << it->second.at(0).value
          << " " << it->second.at(1).value << " " << it->second.at(2).value
-         << ":" << it->second.at(3).value;
+         << "::" << it->second.at(3).value;
 
   return true;
 }
