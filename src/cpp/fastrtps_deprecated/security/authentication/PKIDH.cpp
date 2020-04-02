@@ -1103,7 +1103,7 @@ ValidationResult_t PKIDH::validate_local_identity(
     if (PropertyPolicyHelper::length(auth_properties) == 0)
     {
         exception = _SecurityException_("Not found any dds.sec.auth.builtin.PKI-DH property");
-        EMERGENCY_SECURITY_LOGGING("PKIDH::validate_local_identity", exception.what());
+        EMERGENCY_SECURITY_LOGGING("PKIDH", exception.what());
         return ValidationResult_t::VALIDATION_FAILED;
     }
 
